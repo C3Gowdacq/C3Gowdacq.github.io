@@ -74,7 +74,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:52px;background:rgba
 .t-out{color:var(--text2);padding-left:1.4rem}
 .t-out .accent{color:var(--accent)}
 .t-out .green{color:var(--green)}
-.t-cursor{display:inline-block;width:7px;height:14px;background:var(--accent);margin-left:2px;animation:blink .9s step-end infinite;vertical-align:text-bottom}
+.t-cursor{display:inline-block;width:6px;height:13px;background:var(--accent);vertical-align:middle;margin-left:1px;animation:blink .9s step-end infinite}
 
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.7rem;color:var(--green);background:var(--green-dim);border:1px solid rgba(62,207,142,.2);padding:.3rem .8rem;border-radius:4px;margin-bottom:1.25rem}
 .badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
@@ -112,13 +112,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:52px;background:rgba
 .sec-line{flex:1;height:1px;background:var(--line)}
 
 /* reveal */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
-.reveal.on{opacity:1;transform:none}
-.no-js .reveal{opacity:1;transform:none}
-/* Safety: show all after 2s via animation */
-@keyframes revealFallback{to{opacity:1;transform:none}}
-.reveal{animation:revealFallback 0s 2s forwards}
-.reveal.on{animation:none}
+@keyframes revealFallback{to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;animation:revealFallback 0.01s 1.8s forwards}
+.reveal.on{opacity:1;transform:translateY(0);animation:none}
 .rd1{transition-delay:.06s}.rd2{transition-delay:.12s}.rd3{transition-delay:.18s}.rd4{transition-delay:.24s}
 
 /* ── SKILLS ── */
@@ -251,16 +247,16 @@ footer a:hover{color:var(--accent)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
-.hero-badge{opacity:0;animation:fadeUp .4s .05s forwards}
-.hero-terminal{opacity:0;animation:fadeUp .4s .08s forwards}
-.hero-name{opacity:0;animation:fadeUp .4s .12s forwards}
-.hero-role{opacity:0;animation:fadeUp .4s .17s forwards}
-.hero-desc{opacity:0;animation:fadeUp .4s .22s forwards}
-.hero-btns{opacity:0;animation:fadeUp .4s .27s forwards}
-.hero-sidebar{opacity:0;animation:fadeUp .4s .32s forwards}
+.hero-badge{animation:fadeUp .5s .05s both}
+.hero-terminal{animation:fadeUp .5s .08s both}
+.hero-name{animation:fadeUp .5s .12s both}
+.hero-role{animation:fadeUp .5s .17s both}
+.hero-desc{animation:fadeUp .5s .22s both}
+.hero-btns{animation:fadeUp .5s .27s both}
+.hero-sidebar{animation:fadeUp .5s .32s both}
 
 /* ── TOOLTIP ── */
 [data-tip]{position:relative}
@@ -318,7 +314,7 @@ footer a:hover{color:var(--accent)}
           <span class="terminal-title">chetan@ml:~</span>
         </div>
         <div class="terminal-body">
-          <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd" id="t-cmd"> </span></div>
+          <div class="t-line"><span class="t-prompt">$</span>&nbsp;<span id="t-cmd"></span><span class="t-cursor" id="t-cur"></span></div>
           <div id="t-output" style="margin-top:.35rem"></div>
         </div>
       </div>
@@ -645,30 +641,39 @@ window.addEventListener('scroll',()=>{
 },{passive:true});
 
 /* ══ TERMINAL TYPING ══ */
-const lines=[
-  {cmd:'whoami',out:'<span class="green">chetan_c_chikkegowda</span>'},
-  {cmd:'cat skills.txt',out:'<span class="accent">Python</span> · PyTorch · LangChain · FastAPI · LangGraph · Gemini'},
-  {cmd:'ls projects/',out:'dalal_street_ai/  clinical_risk_assessment/  parkinsons_svm/'},
-  {cmd:'echo $STATUS',out:'<span class="green">Open to internships & collaborations</span>'},
-];
-let li=0,ci=0,phase='typing',outputShown=false;
-const tCmd=document.getElementById('t-cmd'),tOut=document.getElementById('t-output');
-function termTick(){
-  const l=lines[li];
-  if(phase==='typing'){
-    if(ci<=l.cmd.length){tCmd.textContent=' '+l.cmd.slice(0,ci++)+'_';setTimeout(termTick,ci===l.cmd.length+1?600:80);}
-  } else if(phase==='showing'){
-    tCmd.textContent=' '+l.cmd;
-    tOut.innerHTML='<div class="t-out">'+l.out+'</div>';
-    phase='waiting';setTimeout(()=>{phase='clear';termTick()},2200);
-  } else if(phase==='clear'){
-    tOut.innerHTML='';tCmd.textContent=' ';ci=0;phase='typing';
-    li=(li+1)%lines.length;setTimeout(termTick,400);
+(function(){
+  var LINES=[
+    {cmd:'whoami',         out:'chetan_c_chikkegowda'},
+    {cmd:'cat skills.txt', out:'Python · PyTorch · LangChain · FastAPI · LangGraph · Gemini'},
+    {cmd:'ls projects/',   out:'dalal_street_ai/   clinical_risk_assessment/   parkinsons_svm/'},
+    {cmd:'echo $STATUS',   out:'Open to internships & collaborations'},
+  ];
+  var cmdEl=document.getElementById('t-cmd');
+  var outEl=document.getElementById('t-output');
+  if(!cmdEl||!outEl)return;
+  var li=0,ci=0;
+  function type(){
+    var cmd=LINES[li].cmd;
+    cmdEl.textContent=cmd.slice(0,ci);
+    if(ci<cmd.length){ci++;setTimeout(type,90);}
+    else{
+      outEl.textContent=LINES[li].out;
+      setTimeout(erase,2500);
+    }
   }
-}
-// advance phase on cmd complete
-setInterval(()=>{if(phase==='typing'&&ci>lines[li].cmd.length){phase='showing';termTick();}},50);
-setTimeout(termTick,600);
+  function erase(){
+    var cmd=LINES[li].cmd;
+    if(ci>0){
+      ci--;cmdEl.textContent=cmd.slice(0,ci);
+      setTimeout(erase,40);
+    } else {
+      outEl.textContent='';
+      li=(li+1)%LINES.length;
+      setTimeout(type,500);
+    }
+  }
+  setTimeout(type,1200);
+})();
 
 /* ══ RIPPLE ══ */
 document.querySelectorAll('.hb,.nav-cta,.pf-btn,.cl,.copy-btn').forEach(el=>{
@@ -693,23 +698,27 @@ const ro=new IntersectionObserver(entries=>{
   });
 },{threshold:0,rootMargin:'50px 0px 0px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
-// Fallback: if elements are already in view on load (e.g. navigated to #section)
-setTimeout(()=>{
+window.addEventListener('scroll',checkReveal,{passive:true});
+// Immediately trigger for all elements in viewport on load
+function checkReveal(){
   document.querySelectorAll('.reveal:not(.on)').forEach(el=>{
     const r=el.getBoundingClientRect();
-    if(r.top<window.innerHeight){
+    if(r.top<window.innerHeight+100){
       el.classList.add('on');
       el.querySelectorAll('.hs-bar-fill').forEach(b=>b.style.width=b.dataset.w+'%');
     }
   });
-},100);
-// Safety net: show everything after 1.5s regardless
+}
+checkReveal();
+setTimeout(checkReveal,150);
+setTimeout(checkReveal,400);
+// Safety net: show everything after 1.2s regardless
 setTimeout(()=>{
   document.querySelectorAll('.reveal:not(.on)').forEach(el=>{
     el.classList.add('on');
     el.querySelectorAll('.hs-bar-fill').forEach(b=>b.style.width=b.dataset.w+'%');
   });
-},1500);
+},1200);
 
 // hero bars on load
 setTimeout(()=>{document.querySelectorAll('.hs-bar-fill').forEach(b=>b.style.width=b.dataset.w+'%')},700);
