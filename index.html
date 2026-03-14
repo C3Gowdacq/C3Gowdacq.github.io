@@ -29,11 +29,11 @@ a{text-decoration:none;color:inherit}
 ::-webkit-scrollbar-thumb{background:var(--accent)}
 
 /* ── CURSOR ── */
-#cur{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s,width .15s,height .15s,opacity .15s;mix-blend-mode:screen}
-#cur-trail{position:fixed;width:28px;height:28px;border:1px solid rgba(79,142,247,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s}
-body.clicking #cur{width:14px;height:14px;opacity:.6}
-body.on-link #cur{width:16px;height:16px;opacity:.8}
-body.on-link #cur-trail{width:44px;height:44px;border-color:rgba(79,142,247,.3)}
+#cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,opacity .15s;box-shadow:0 0 8px var(--accent),0 0 16px rgba(79,142,247,.4)}
+#cur-trail{position:fixed;width:32px;height:32px;border:1.5px solid rgba(79,142,247,.7);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s;background:rgba(79,142,247,.04)}
+body.clicking #cur{width:16px;height:16px;opacity:.7;box-shadow:0 0 12px var(--accent),0 0 24px rgba(79,142,247,.5)}
+body.on-link #cur{width:14px;height:14px;background:var(--accent);box-shadow:0 0 12px var(--accent),0 0 24px rgba(79,142,247,.5)}
+body.on-link #cur-trail{width:48px;height:48px;border-color:rgba(79,142,247,.5);background:rgba(79,142,247,.03)}
 
 /* ── PROGRESS ── */
 #prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--green));z-index:2000;width:0;transition:width .08s}
@@ -299,7 +299,7 @@ footer a:hover{color:var(--accent)}
       <a href="#education">Education</a>
       <a href="#contact">Contact</a>
     </div>
-    <a href="https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view" target="_blank" class="nav-resume-btn">Resume ↗</a>
+    <a href="https://drive.google.com/file/d/1XOEl9m_jY8piHGBzu5oSNSR3-tF7bJqL/view?usp=sharing" target="_blank" class="nav-resume-btn">Resume ↗</a>
   </div>
 </nav>
 
@@ -337,7 +337,7 @@ footer a:hover{color:var(--accent)}
           LinkedIn
         </a>
         <a id="email-hero" class="hb hb-outline mag">✉ Email</a>
-        <a href="https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view" target="_blank" class="hb hb-outline mag">
+        <a href="https://drive.google.com/file/d/1XOEl9m_jY8piHGBzu5oSNSR3-tF7bJqL/view?usp=sharing" target="_blank" class="hb hb-outline mag">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           Resume
         </a>
@@ -585,7 +585,7 @@ footer a:hover{color:var(--accent)}
           <span>linkedin.com/in/chetan-c</span>
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
-        <a href="https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view" target="_blank" class="cl" style="border-color:var(--accent);color:var(--accent)">
+        <a href="https://drive.google.com/file/d/1XOEl9m_jY8piHGBzu5oSNSR3-tF7bJqL/view?usp=sharing" target="_blank" class="cl" style="border-color:var(--accent);color:var(--accent)">
           <span>View / Download Resume</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         </a>
